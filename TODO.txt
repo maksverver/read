@@ -1,0 +1,30 @@
+v1.0:
+  - HTML manual (what it is, how to install, how to customize, shortcut keys, link to github page)
+      - show some screenshots/GIFs?
+  - Show time remaining (based on WPM/wordIndex)
+
+Bugs:
+  - when pressing "space" or "escape", the key event is propagated to the underlying page
+    (I currently call only preventDefault. Should I call stopPropagation() too?)
+    (despite event.stopImmediateProgation() being called!)
+
+Later:
+  - Move-back-a-word (shift left/right)
+  - Question mark ('?' to show help)
+  - Something about hyphenated-words-which-are-shown-too-shortly
+  - Progress bar:
+    - CSS animation for smoothness?
+    - Allow clicking/dragging to change position
+    - Automatically increase height as mouse get closer for easier access
+  - Option to install as Grease/TamperMonkey script
+    (requires fixing `@run-at context-menu` bugs!)
+  - Sentence preview when seeking?
+  - Option to alternate between RSVP/regular text? (Perhaps on pause?)
+    This would also help when seeking.
+  - Embed HTML/CSS in the bookmarklet for easier editing?
+    The widget is fixed, so there is no real need to build its DOM tree
+    dynamically, and inserting literal HTML/CSS would be easier to customize.
+    (Just define a few "special" element ids or CSS classes to find the right
+     divs to update.)
+  - Mobile support? (Requires all functionality is available by tapping or
+    dragging, without the need for a keyboard.)

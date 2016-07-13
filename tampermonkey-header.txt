@@ -1,0 +1,9 @@
+// ==UserScript==
+// @name         Speed Reader
+// @namespace    http://maks.verver.ch/
+// @version      0.1
+// @description  Leverage rapid serial visual presentation to increase your reading speed.
+// @author       Maks Verver
+// @grant        none
+// @run-at       context-menu
+// ==/UserScript==
