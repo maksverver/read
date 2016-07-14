@@ -1,3 +1,3 @@
-Read! is a speed-reading widget using rapid serial visual presentation.
+Read! is a speed reading bookmarklet using rapid serial visual presentation.
 
-Install it as a Bookmarklet via http://maksverver.github.io/read/.
+Usage and installation instructions: https://maksverver.github.io/read/
