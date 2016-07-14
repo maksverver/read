@@ -1,0 +1,15 @@
+body {
+  font: 12pt sans-serif;
+  color: #404040;
+  background: white;
+}
+
+textarea#options {
+  background: #e8e8e8;
+  border: 0;
+  font: 10pt monospace;
+}
+
+input#generate {
+  font-size: 16pt;
+}

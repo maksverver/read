@@ -2,6 +2,7 @@ v1.0:
   - Write README.md:
      Describe what this is.
      Table of shortcut keys.
+     Slightly nicer styling (e.g. of subtitle, links).
   - Show time remaining (based on WPM/wordIndex)
 
 Bugs:
