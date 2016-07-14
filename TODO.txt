@@ -1,6 +1,7 @@
 v1.0:
-  - HTML manual (what it is, how to install, how to customize, shortcut keys, link to github page)
-      - show some screenshots/GIFs?
+  - Write README.md:
+     Describe what this is.
+     Table of shortcut keys.
   - Show time remaining (based on WPM/wordIndex)
 
 Bugs:

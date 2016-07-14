@@ -1,40 +1,94 @@
-function read_activate(options) {
+(function () {
   'use strict';
 
+  //
+  // Configurable options start here! Tune these to your preference.
+  //
+
+  // Default reading speed in words per minute.
+  var wordsPerMinute = 500;
+
+  // Words are separated by spaces or em-dashes. (This rule might need some
+  // tweaking when reading e.g. French text, where it's common to insert
+  // space before punctuation.)
+  var wordSeparator = /\s+|—/;
+
+  // Style for the container div that covers the entire screen.
+  var containerStyle = {
+    position: 'fixed', left: 0, right: 0, top: 0, bottom: 0, zIndex: 1000};
+
+  // Style for the background div. It exists to dim the screen a little.
+  var backgroundStyle = {
+    background: 'black', opacity: 0.5,
+    position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, zIndex: -1};
+
+  // Style for the box that holds the current word. It is opaque to ensure
+  // sufficient contrast with the current word, but has 15% margins so the
+  // original page is still visible around it.
+  var wordBoxStyle = {
+    background: 'white', display: 'table', width: '70%', height: '70%',
+    position: 'absolute', left: '15%', right: '15%', top: '15%', bottom: '15%'};
+
+  // Style for the word itself. It uses a large font for ease of recognition.
+  var wordStyle = {
+    font: '64pt sans-serif', color: '#444',
+    display: 'table-cell', textAlign: 'center', verticalAlign: 'middle'};
+
+  // Style for the progress bar container. Mostly useful to style the background.
+  var progressHolderStyle = {
+    position: 'absolute', left: '0px', right: '0px', bottom: '0px',
+    background: '#eef', height: '8pt'};
+
+  // Style for the progress bar itself. Its background color should contrast
+  // with the background of the holder div. Its width will vary over time.
+  var progressStyle = {
+    position: 'absolute', left: '0px', top: '0px', bottom: '0px',
+    background: '#44f', width: '0%'};
+
+  // Style for the WPM counter display.
+  var speedStyle = {
+    position: 'absolute', top: '1em', right: '1em',
+    font: '12pt sans-serif', color: '#888'};
+
+  //
+  // Implementation starts here!
+  //
   var words = parseWords(getSelection().toString());
   var position = -1;  // index in words
   var speed = 0;  // in words per minute (WPM)
   var intervalId = null;  // currently scheduled interval timer
-  var gui = buildGui();
   var key_map = buildKeyMap();
 
   if (words.length === 0) {
     alert("No text selected!");
-  } else {
-    setSpeed(options.wordsPerMinute);
-    start();
+    return;
   }
+
+  // Build the GUI.
+  var containerDiv = newDiv(containerStyle);
+  var backgroundDiv = newDiv(backgroundStyle);
+  var wordBoxDiv = newDiv(wordBoxStyle);
+  var wordDiv = newDiv(wordStyle);
+  var progressHolderDiv = newDiv(progressHolderStyle);
+  var progressDiv = newDiv(progressStyle);
+  var speedDiv = newDiv(speedStyle);
+  wordBoxDiv.appendChild(wordDiv);
+  wordBoxDiv.appendChild(progressHolderDiv);
+  wordBoxDiv.appendChild(speedDiv);
+  progressHolderDiv.appendChild(progressDiv);
+  containerDiv.appendChild(backgroundDiv);
+  containerDiv.appendChild(wordBoxDiv);
+
+  // Start reading!
+  setSpeed(wordsPerMinute);
+  start();
   return;
 
   function parseWords(text) {
-    return text.split(options.wordSeparator).filter(function(s) { return !!s; });
+    return text.split(wordSeparator).filter(function(s) { return !!s; });
   }
 
   function buildGui() {
-    var containerDiv = newDiv(options.containerStyle);
-    var backgroundDiv = newDiv(options.backgroundStyle);
-    var wordBoxDiv = newDiv(options.wordBoxStyle);
-    var wordDiv = newDiv(options.wordStyle);
-    var progressHolderDiv = newDiv(options.progressHolderStyle);
-    var progressDiv = newDiv(options.progressStyle);
-    var speedDiv = newDiv(options.speedStyle);
-    wordBoxDiv.appendChild(wordDiv);
-    wordBoxDiv.appendChild(progressHolderDiv);
-    wordBoxDiv.appendChild(speedDiv);
-    progressHolderDiv.appendChild(progressDiv);
-    containerDiv.appendChild(backgroundDiv);
-    containerDiv.appendChild(wordBoxDiv);
-    backgroundDiv.addEventListener('click', stop);
     return {
       containerDiv: containerDiv,
       progressDiv: progressDiv,
@@ -61,7 +115,8 @@ function read_activate(options) {
   }
 
   function start() {
-    document.body.appendChild(gui.containerDiv);
+    backgroundDiv.addEventListener('click', stop);
+    document.body.appendChild(containerDiv);
     document.addEventListener("keydown", onKeyDown);
     play();
   }
@@ -69,7 +124,7 @@ function read_activate(options) {
   function stop() {
     pause();
     document.removeEventListener("keydown", onKeyDown);
-    document.body.removeChild(gui.containerDiv);
+    document.body.removeChild(containerDiv);
   }
 
   function buildKeyMap() {
@@ -104,10 +159,10 @@ function read_activate(options) {
     handler();
   }
   function setPosition(i) {
-    clearElem(gui.wordDiv);
+    clearElem(wordDiv);
     if (i >= 0 && i < words.length) {
-      appendText(gui.wordDiv, words[i]);
-      gui.progressDiv.style.width = (i == 0 ? 0 : 100 * i / (words.length - 1)) + '%';
+      appendText(wordDiv, words[i]);
+      progressDiv.style.width = (i == 0 ? 0 : 100 * i / (words.length - 1)) + '%';
     }
     position = i;
   }
@@ -122,8 +177,8 @@ function read_activate(options) {
 
   function setSpeed(newWpm) {
     speed = newWpm;
-    clearElem(gui.speedDiv);
-    appendText(gui.speedDiv, speed + ' WPM');
+    clearElem(speedDiv);
+    appendText(speedDiv, speed + ' WPM');
     if (!isPaused()) {
       pause();
       play();
@@ -158,7 +213,7 @@ function read_activate(options) {
   function previousSentence() {
     if (position > 0) {
       var i = position - 1;
-      while (i > 0 && !words[i - 1].match(options.sentenceEnd)) --i;
+      while (i > 0 && !words[i - 1].match(sentenceEnd)) --i;
       setPosition(i);
     }
   }
@@ -166,7 +221,7 @@ function read_activate(options) {
   function nextSentence() {
     if (position + 1 < words.length) {
       var i = position + 1;
-      while (i + 1 < words.length && !words[i - 1].match(options.sentenceEnd)) ++i;
+      while (i + 1 < words.length && !words[i - 1].match(sentenceEnd)) ++i;
       setPosition(i);
     }
   }
@@ -188,4 +243,4 @@ function read_activate(options) {
     }
   }
 
-};
+})();
