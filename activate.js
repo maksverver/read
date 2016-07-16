@@ -70,18 +70,15 @@
 
   // Build the GUI.
   var containerDiv = newDiv(containerStyle);
-  var backgroundDiv = newDiv(backgroundStyle);
-  var wordBoxDiv = newDiv(wordBoxStyle);
-  var wordDiv = newDiv(wordStyle);
-  var progressHolderDiv = newDiv(progressHolderStyle);
-  var progressDiv = newDiv(progressStyle);
-  var speedDiv = newDiv(speedStyle);
-  wordBoxDiv.appendChild(wordDiv);
-  wordBoxDiv.appendChild(progressHolderDiv);
-  wordBoxDiv.appendChild(speedDiv);
-  progressHolderDiv.appendChild(progressDiv);
-  containerDiv.appendChild(backgroundDiv);
-  containerDiv.appendChild(wordBoxDiv);
+  var backgroundDiv = newDiv(backgroundStyle, containerDiv);
+  var wordBoxDiv = newDiv(wordBoxStyle, containerDiv);
+  var wordDiv = newDiv(wordStyle, wordBoxDiv);
+  var progressHolderDiv = newDiv(progressHolderStyle, wordBoxDiv);
+  var progressDiv = newDiv(progressStyle, progressHolderDiv);
+  var speedDiv = newDiv(speedStyle, wordBoxDiv);
+  var wordCountDiv = newDiv(wordCountStyle, wordBoxDiv);
+  var timeRemainingDiv = newDiv(timeRemainingStyle, wordBoxDiv);
+  setText(wordCountDiv, words.length + ' words');
 
   // Start reading!
   setSpeed(wordsPerMinute);
@@ -100,12 +97,15 @@
       speedDiv: speedDiv}
   }
 
-  function newDiv(style) {
+  function newDiv(style, parent) {
     var div = document.createElement('div');
     if (style) {
       for (var key in style) {
         div.style[key] = style[key];
       }
+    }
+    if (parent) {
+      parent.appendChild(div);
     }
     return div;
   }
