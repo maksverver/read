@@ -110,11 +110,8 @@
     return div;
   }
 
-  function clearElem(elem) {
+  function setText(elem, text) {
     while (elem.lastChild) elem.removeChild(elem.lastChild);
-  }
-
-  function appendText(elem, text) {
     elem.appendChild(document.createTextNode(text));
   }
 
@@ -164,9 +161,8 @@
     handler();
   }
   function setPosition(i) {
-    clearElem(wordDiv);
     if (i >= 0 && i < words.length) {
-      appendText(wordDiv, words[i]);
+      setText(wordDiv, words[i]);
       progressDiv.style.width = (i == 0 ? 0 : 100 * i / (words.length - 1)) + '%';
     }
     position = i;
@@ -182,8 +178,7 @@
 
   function setSpeed(newWpm) {
     speed = newWpm;
-    clearElem(speedDiv);
-    appendText(speedDiv, speed + ' WPM');
+    setText(speedDiv, speed + ' WPM');
     if (!isPaused()) {
       pause();
       play();
