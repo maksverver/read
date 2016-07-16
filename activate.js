@@ -71,7 +71,6 @@
   var position = -1;  // index in words
   var speed = 0;  // in words per minute (WPM)
   var intervalId = null;  // currently scheduled interval timer
-  var key_map = buildKeyMap();
 
   if (words.length === 0) {
     alert("No text selected!");
@@ -90,6 +89,30 @@
   var timeRemainingDiv = newDiv(timeRemainingStyle, wordBoxDiv);
   setText(wordCountDiv, words.length + ' words');
 
+  // Build the key map.
+  // Key codes are handled by onKeyDown.
+  var key_code_map = {
+    // Escape
+    27: stop,
+    // Left arrow
+    37: previousSentence,
+    // Right arrow
+    39: nextSentence};
+  // Char codes are handled by onKeyPress.
+  var char_code_map = {
+    // Space
+    32: togglePausePlay,
+    // Plus sign
+    43: increaseSpeed,
+    // Minus sign
+    45: decreaseSpeed,
+    // Period
+    46: manualStep,
+  };
+  for (var digit = 0; digit < 10; ++digit) {
+    // Digits: change speed. 1=100 WPM, 2=200 WPM, .. 9=900 WPM, 0=1000 WPM.
+    char_code_map[48 + digit] = setSpeed.bind(null, digit > 0 ? 100*digit : 1000);
+  }
   // Start reading!
   setSpeed(wordsPerMinute);
   start();
@@ -130,45 +153,31 @@
     wordBoxDiv.addEventListener('click', togglePausePlay);
     document.body.appendChild(containerDiv);
     document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keypress", onKeyPress);
     play();
   }
 
   function stop() {
     pause();
+    document.removeEventListener("keypress", onKeyPress);
     document.removeEventListener("keydown", onKeyDown);
     document.body.removeChild(containerDiv);
   }
 
-  function buildKeyMap() {
-    var key_map = {
-      // Escape
-      27: stop,
-      // Space
-      32: togglePausePlay,
-      // Left arrow
-      37: previousSentence,
-      // Right arrow
-      39: nextSentence,
-      // Period
-      190: manualStep,
-      // Plus sign
-      187: increaseSpeed,
-      // Minus sign
-      189: decreaseSpeed,
-    };
-    for (var digit = 0; digit < 10; ++digit) {
-      // Digits: change speed. 1=100 WPM, 2=200 WPM, .. 9=900 WPM, 0=1000 WPM.
-      key_map[48 + digit] = setSpeed.bind(null, digit > 0 ? 100*digit : 1000);
-    }
-    return key_map;
+  function handleKeyEvent(event, map, key) {
+    var handler = map[key];
+    if (!handler) return;
+    event.stopPropagation();
+    event.preventDefault();
+    handler();
   }
 
   function onKeyDown(keyEvent) {
-    var handler = key_map[keyEvent.keyCode];
-    if (!handler) return;
-    keyEvent.stopPropagation();
-    keyEvent.preventDefault();
-    handler();
+    return handleKeyEvent(keyEvent, key_code_map, keyEvent.keyCode);
+  }
+
+  function onKeyPress(keyEvent) {
+    return handleKeyEvent(keyEvent, char_code_map, keyEvent.charCode);
   }
 
   function formatTime(secs) {
