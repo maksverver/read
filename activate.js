@@ -120,6 +120,7 @@
 
   function start() {
     backgroundDiv.addEventListener('click', stop);
+    wordBoxDiv.addEventListener('click', togglePausePlay);
     document.body.appendChild(containerDiv);
     document.addEventListener("keydown", onKeyDown);
     play();
