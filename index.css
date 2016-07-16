@@ -13,3 +13,42 @@ textarea#options {
 input#generate {
   font-size: 16pt;
 }
+
+a {
+  color: #0000a0;
+}
+
+a:visited {
+  color: #000080;
+}
+
+h4 > a {
+  color: #c00000 !important;
+}
+
+h1, h2, h3, h4 {
+  font-weight: normal;
+  color: #ff0000;
+}
+
+h3 {
+  color: red;
+}
+
+h4 {
+  font-style: italic;
+  font-size: 16pt;
+}
+
+table {
+  border: 2px solid #ffe0e0;
+  padding: 0.5em;
+}
+
+table th {
+  text-align: right;
+}
+
+table td {
+  padding: 0 1em 0 1em;
+}

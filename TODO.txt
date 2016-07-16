@@ -9,7 +9,8 @@ Bugs:
     (I currently call only preventDefault. Should I call stopPropagation() too?)
     (despite event.stopImmediateProgation() being called!)
 
-Later:
+Maybe later:
+  - Allow easy customization of default WPM
   - Move-back-a-word (shift left/right)
   - Question mark ('?' to show help)
   - Something about hyphenated-words-which-are-shown-too-shortly
