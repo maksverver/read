@@ -8,6 +8,10 @@
   // Default reading speed in words per minute.
   var wordsPerMinute = 500;
 
+  // Sentences are words which end with a period, question mark, or exclamation
+  // point, optionally followed by a closing quotation mark or parenthesis.
+  var sentenceEnd = /[.?!]['"’”)]?$/;
+
   // Words are separated by spaces or em-dashes. (This rule might need some
   // tweaking when reading e.g. French text, where it's common to insert
   // space before punctuation.)
