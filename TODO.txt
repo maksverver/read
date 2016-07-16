@@ -3,7 +3,6 @@ v1.0:
      Describe what this is.
      Table of shortcut keys.
      Slightly nicer styling (e.g. of subtitle, links).
-  - Show time remaining (based on WPM/wordIndex)
 
 Bugs:
   - when pressing "space" or "escape", the key event is propagated to the underlying page

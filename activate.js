@@ -54,6 +54,16 @@
     position: 'absolute', top: '1em', right: '1em',
     font: '12pt sans-serif', color: '#888'};
 
+  // Style for the word counter
+  var wordCountStyle = {
+    position: 'absolute', bottom: '12pt', left: '1em',
+    font: '12pt sans-serif', color: '#888'};
+
+  // Style for the time-remaining indicator.
+  var timeRemainingStyle = {
+    position: 'absolute', bottom: '12pt', right: '1em',
+    font: '12pt sans-serif', color: '#888'};
+
   //
   // Implementation starts here!
   //
@@ -160,10 +170,19 @@
     keyEvent.preventDefault();
     handler();
   }
+
+  function formatTime(secs) {
+    var mins = parseInt(secs/60);
+    var secs = parseInt(secs%60);
+    return mins + ':' + (secs < 10 ? '0' + secs : secs);
+  }
+
   function setPosition(i) {
     if (i >= 0 && i < words.length) {
       setText(wordDiv, words[i]);
       progressDiv.style.width = (i == 0 ? 0 : 100 * i / (words.length - 1)) + '%';
+      setText(timeRemainingDiv,
+          formatTime((words.length - i - 1) * 60 / speed + 0.5) + ' remaining');
     }
     position = i;
   }
