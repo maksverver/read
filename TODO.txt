@@ -1,9 +1,3 @@
-v1.0:
-  - Write README.md:
-     Describe what this is.
-     Table of shortcut keys.
-     Slightly nicer styling (e.g. of subtitle, links).
-
 Bugs:
   - when pressing "space" or "escape", the key event is propagated to the underlying page
     (I currently call only preventDefault. Should I call stopPropagation() too?)
